@@ -1,6 +1,6 @@
 #!/bin/bash
-sbatch start_notebook.sh > tmp.txt
-JOB_ID=$(<tmp.txt) # get the sbatch job id so we can read the slurm output
+sbatch batch_notebook.sh > /tmp/slurm_job_id.txt
+JOB_ID=$(</tmp/slurm_job_id.txt) # get the sbatch job id so we can read the slurm output
 JOB_ID=${JOB_ID#*"Submitted batch job "}
 echo $JOB_ID
 while [ ! -f slurm-"$JOB_ID".out ]
@@ -18,4 +18,4 @@ JUPYTER_TOKEN=$(echo $JUPYTER_TOKEN | cut -d ' ' -f 1) # get the token on its ow
 
 URL="$URL?token=$JUPYTER_TOKEN" # build the base url with the jupyter token
 echo $URL # print it to the screen so the user can easily copy and paste
-rm tmp.txt 
+rm /tmp/slurm_job_id.txt 
